@@ -1,6 +1,7 @@
-const { createServer } = require('node:http');
-const { randomInt } = require('node:crypto');
-import {v4 as uuidv4} from 'uuid';
+import { createServer } from 'node:http';
+import { randomInt } from 'node:crypto';
+import { v4 } from 'uuid';
+export { server };
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -23,12 +24,6 @@ const server = createServer(async (req, res) => {
                             // "captureRate": 190
                         };
         return poke;
-    }
-
-    if (req.method === 'GET' && req.url === '/hello') {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/plain');
-        res.end('Hello World');
     }
 
     if (req.method === 'GET' && req.url === '/wild') {
@@ -63,7 +58,7 @@ const server = createServer(async (req, res) => {
                 const resultat = {
                                     "success": true,
                                     "captured": {
-                                        "uuid": uuidv4(),
+                                        "uuid": v4(),
                                         "pokemonId": lastEncounter,
                                         "name": curPoke.pokemon.name,
                                         "nickname": curPoke.pokemon.name,
@@ -97,7 +92,9 @@ const server = createServer(async (req, res) => {
     }
 });
 
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-});
+if (process.env.NODE_ENV !== 'test') {
+    server.listen(port, hostname, () => {
+        console.log(`Server running at http://${hostname}:${port}/`);
+    });
+}
 

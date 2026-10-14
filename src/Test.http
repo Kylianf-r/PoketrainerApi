@@ -1,0 +1,8 @@
+### GET request to example server
+GET http://127.0.0.1:3000/wild
+
+###
+POST http://127.0.0.1:3000/capture/990
+
+###
+GET http://127.0.0.1:3000/pokedex
