@@ -87,9 +87,9 @@ const server = createServer(async (req, res) => {
         res.end(JSON.stringify(resultat));
     }
 
-    if (req.method === "GET" && req.url.startsWith('/pokedex/')) {
-        res.setHeader('Content-Type', 'application/json');
-    }
+    //if (req.method === "GET" && req.url.startsWith('/pokedex/')) {
+    //    res.setHeader('Content-Type', 'application/json');
+    //}
 });
 
 if (process.env.NODE_ENV !== 'test') {

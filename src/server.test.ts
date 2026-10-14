@@ -1,20 +1,43 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { server } from './server.js'; // Assure-toi que le serveur est bien exporté à la fin de ton server.ts
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
+import { server } from './server.js';
 
-const port = 3001; // On utilise un port différent pour les tests
+const port = 3001;
 const baseUrl = `http://127.0.0.1:${port}`;
 
-// S'exécute une seule fois avant tous les tests
 beforeAll(() => {
     server.listen(port, '127.0.0.1');
 });
 
-// S'exécute une seule fois après tous les tests
 afterAll(() => {
     server.close();
 });
 
 describe('Tests des routes de l\'API Pokétrainer', () => {
+
+    it('GET /wild devrait retourner un Pokémon mocké (Statut 200)', async () => {
+        // réponse a envoyer (faux pokémon)
+        const fausseReponsePokeApi = {
+            id: 25,
+            name: "pikachu",
+            types: [{ type: { name: "electric" } }],
+            stats: [{ base_stat: 35, stat: { name: "hp" } }]
+        };
+        //en cas de fetch on mock
+        const fetchMock = vi.spyOn(global, 'fetch').mockResolvedValue({
+            json: async () => fausseReponsePokeApi
+        } as Response);
+        const response = await fetch(`${baseUrl}/wild`);
+        const data = await response.json();
+        //Verif http
+        expect(response.status).toBe(200);
+
+        //verif pokemon mocké
+        expect(data.pokemon.id).toBe(25);
+        expect(data.pokemon.name).toBe("pikachu");
+
+        //effacement mock
+        vi.restoreAllMocks();
+    });
 
     it('GET /wild devrait retourner un Pokémon (Statut 200)', async () => {
         // On fait une vraie requête HTTP avec le fetch natif
