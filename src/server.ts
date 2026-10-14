@@ -16,11 +16,9 @@ async function callPoke(id : number){
         "pokemon": {
             "id": data.id,
             "name": data.name,
-            // "sprite": data.,
             "types": data.types,
             "stats": data.stats
         },
-        // "captureRate": 190
     };
     return poke;
 }
@@ -32,7 +30,11 @@ app.get('/', (req, res) => {
 app.get('/wild', (async (req, res) => {
     const randomId = randomInt(1,1025);
     lastEncounter = randomId;
-    const randomPoke = await callPoke(randomId)
+    const randomPoke = await callPoke(randomId).catch(() => null);
+
+    if (!randomPoke) {
+        return res.status(424).json("Donnée introuvable / problème de dépendance.");
+    }
 
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
@@ -42,7 +44,7 @@ app.get('/wild', (async (req, res) => {
 app.post('/capture/:id', (async(req, res) => {
     const luck = randomInt(1,100);
     const captureRate = randomInt(1,100);
-    const id = req.params.id;
+    const id: number = Number.parseInt(req.params.id as string);
     res.setHeader('Content-Type', 'application/json');
 
     if (id != lastEncounter){

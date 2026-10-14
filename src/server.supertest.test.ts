@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
 import { app } from './server.js';
 
-describe('Suite Supertest - Routes de l API Pokétrainer', () => {
+describe('Supertest - Routes de l API Pokétrainer', () => {
 
     it('GET /wild devrait retourner un vrai Pokémon (Statut 200)', async () => {
         // La magie Supertest : on lui passe directement le serveur et la route
@@ -20,6 +20,10 @@ describe('Suite Supertest - Routes de l API Pokétrainer', () => {
         // On s'assure que les types de données sont bons
         expect(typeof response.body.pokemon.id).toBe('number');
         expect(typeof response.body.pokemon.name).toBe('string');
+    });
+
+    it('404 (Not Found) /wild', async () => {
+
     });
 
     /*it('POST /capture/:id avec un mauvais ID devrait renvoyer une erreur 400', async () => {
